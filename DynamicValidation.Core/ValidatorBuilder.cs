@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
@@ -8,7 +9,7 @@ namespace DynamicValidation.Core
 		private readonly IList<IValidationRule<TEntity>> rules = new List<IValidationRule<TEntity>>();
 
 		public ValidatorBuilder<TEntity> WithRule<TProperty>(
-			Func<TEntity, TProperty> getValue,
+			Expression<Func<TEntity, TProperty>> getValue,
 			Func<TProperty, bool> rule,
 			string message)
 		{
