@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Validate
+namespace DynamicValidation.Core
 {
 	internal class ValidationRule<TEntity, TProperty> : IValidationRule<TEntity>
 	{

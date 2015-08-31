@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValidateShowCase", "ValidateShowCase\ValidateShowCase.csproj", "{5C518B9C-72E6-466B-992A-B2372A5943DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicValidation.Core", "DynamicValidation.Core\DynamicValidation.Core.csproj", "{3C1E070E-74F8-4D25-98AC-6EBFEFBF9B70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicValidation.Extensions", "DynamicValidation.Extensions\DynamicValidation.Extensions.csproj", "{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5C518B9C-72E6-466B-992A-B2372A5943DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C518B9C-72E6-466B-992A-B2372A5943DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C518B9C-72E6-466B-992A-B2372A5943DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C518B9C-72E6-466B-992A-B2372A5943DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C1E070E-74F8-4D25-98AC-6EBFEFBF9B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C1E070E-74F8-4D25-98AC-6EBFEFBF9B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C1E070E-74F8-4D25-98AC-6EBFEFBF9B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C1E070E-74F8-4D25-98AC-6EBFEFBF9B70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

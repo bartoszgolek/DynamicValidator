@@ -1,4 +1,4 @@
-﻿namespace Validate
+﻿namespace DynamicValidation.Core
 {
 	internal interface IValidationRule<in TEntity>
 	{

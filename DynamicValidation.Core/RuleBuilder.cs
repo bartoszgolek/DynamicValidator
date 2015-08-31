@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Validate
+namespace DynamicValidation.Core
 {
-	internal class RuleBuilder<TEntity, TProperty> : IRuleBuilder<TEntity, TProperty>
+	public class RuleBuilder<TEntity, TProperty> : IRuleBuilder<TEntity, TProperty>
 	{
 		private readonly ValidatorBuilder<TEntity> validatorBuilder;
 		private readonly Func<TEntity, TProperty> getValue;

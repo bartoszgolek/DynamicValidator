@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Validate
+namespace DynamicValidation.Core
 {
 	public interface IRuleBuilder<TEntity, out TProperty>
 	{

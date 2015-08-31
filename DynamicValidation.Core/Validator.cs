@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Validate
+namespace DynamicValidation.Core
 {
 	internal class Validator<T> : IValidator<T>
 	{

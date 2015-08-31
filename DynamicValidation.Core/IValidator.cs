@@ -1,4 +1,4 @@
-﻿namespace Validate
+﻿namespace DynamicValidation.Core
 {
 	public interface IValidator<in T>
 	{

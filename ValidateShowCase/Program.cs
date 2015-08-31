@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
+using DynamicValidation.Core;
+using DynamicValidation.Extensions;
 
-namespace Validate
+namespace ValidateShowCase
 {
 	internal class Program
 	{
