@@ -5,19 +5,21 @@ namespace DynamicValidation.Core
 {
 	public class RuleBuilder<TEntity, TProperty> : IRuleBuilder<TEntity, TProperty>
 	{
-		private readonly ValidatorBuilder<TEntity> validatorBuilder;
+		private readonly IValidatorBuilder<TEntity> validatorBuilder;
 		private readonly Expression<Func<TEntity, TProperty>> getValue;
 
-		public RuleBuilder(ValidatorBuilder<TEntity> validatorBuilder, Expression<Func<TEntity, TProperty>> getValue)
+		public RuleBuilder(IValidatorBuilder<TEntity> validatorBuilder, Expression<Func<TEntity, TProperty>> getValue)
 		{
 			this.validatorBuilder = validatorBuilder;
 			this.getValue = getValue;
 		}
 
-		public ValidatorBuilder<TEntity> Custom(Func<TProperty, bool> rule, string message)
+		public IValidatorBuilderWithMessageBuilder<TEntity, TProperty> Custom(Expression<Func<TProperty, bool>> rule)
 		{
-			validatorBuilder.WithRule(getValue, rule, message);
-			return validatorBuilder;
+			return new ValidatorBuilderWithMessageBuilder<TEntity, TProperty>(
+				validatorBuilder,
+				new MessageBuilder<TEntity, TProperty>(validatorBuilder, getValue, rule)
+			);
 		}
 	}
 }

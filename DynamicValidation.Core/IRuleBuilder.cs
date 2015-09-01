@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
-	public interface IRuleBuilder<TEntity, out TProperty>
+	public interface IRuleBuilder<TEntity, TProperty>
 	{
-		ValidatorBuilder<TEntity> Custom(Func<TProperty, bool> rule, string message);
+		IValidatorBuilderWithMessageBuilder<TEntity, TProperty> Custom(Expression<Func<TProperty, bool>> rule);
 	}
 }

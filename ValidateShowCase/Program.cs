@@ -16,15 +16,16 @@ namespace ValidateShowCase
 			builder.Register(
 				c =>
 					new ValidatorBuilder<TestEntity>()
-						.WithRule(t => t.StringProperty, s => !string.IsNullOrEmpty(s), "StringProperty cannot be empty")
-						.WithRule(t => t.IntProperty, i => i > 0, "IntProperty have to be greater than zero")
-						.Assert(t => t.IntProperty).Custom(i => i < 10, "IntProperty have to be less than ten")
-						.Assert(t => t.StringProperty).HasValue("StringProperty")
-						.Assert(t => t.StringProperty).MaxLength(10, "StringProperty")
-						.Assert(t => t).Custom(t => t.IntProperty == 5 && t.StringProperty != null, "CUstom message")
-						.Assert(t => t.DecimalProperty).IsNotNull("DecimalProperty")
-						.Assert(t => t.IntProperty).IsNotNull("IntProperty")
-						.Create()
+					.WithRule(t => t.StringProperty, s => !string.IsNullOrEmpty(s), "StringProperty cannot be empty")
+					.WithRule(t => t.IntProperty, i => i > 0, "IntProperty have to be greater than zero")
+					.RuleOn(t => t.IntProperty).Custom(i => i < 10).WithMessage("IntProperty have to be less than ten")
+					.RuleOn(t => t.IntProperty).Custom(i => i < 0)
+					.RuleOn(t => t.StringProperty).HasValue("StringProperty")
+					.RuleOn(t => t.StringProperty).MaxLength(10, "StringProperty")
+					.RuleOn(t => t).Custom(t => t.IntProperty == 5 && t.StringProperty != null).WithMessage("Custom message")
+					.RuleOn(t => t.DecimalProperty).IsNotNull("DecimalProperty")
+					.RuleOn(t => t.IntProperty).IsNotNull("IntProperty")
+					.Create()
 				).As<IValidator<TestEntity>>();
 
 			var container = builder.Build();

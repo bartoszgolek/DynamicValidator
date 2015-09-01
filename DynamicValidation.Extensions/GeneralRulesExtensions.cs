@@ -4,9 +4,9 @@ namespace DynamicValidation.Extensions
 {
 	public static class GeneralRulesExtensions
 	{
-		public static ValidatorBuilder<TEntity> IsNotNull<TEntity, TProperty>(this IRuleBuilder<TEntity, TProperty> ruleBuilder, string property)
+		public static IValidatorBuilder<TEntity> IsNotNull<TEntity, TProperty>(this IRuleBuilder<TEntity, TProperty> ruleBuilder, string property)
 		{
-			return ruleBuilder.Custom(t => t != null, string.Format("{0} cannot be Null", property));
+			return ruleBuilder.Custom(t => t != null).WithMessage(string.Format("{0} cannot be Null", property));
 		}
 	}
 }

@@ -4,13 +4,23 @@ using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
-	public class ValidatorBuilder<TEntity>
+	public interface IValidatorBuilder<TEntity>
+	{
+		ValidatorBuilder<TEntity> WithRule<TProperty>(
+			Expression<Func<TEntity, TProperty>> getValue,
+			Expression<Func<TProperty, bool>> rule,
+			string message);
+
+		IValidator<TEntity> Create();
+	}
+
+	public class ValidatorBuilder<TEntity> : IValidatorBuilder<TEntity>
 	{
 		private readonly IList<IValidationRule<TEntity>> rules = new List<IValidationRule<TEntity>>();
 
 		public ValidatorBuilder<TEntity> WithRule<TProperty>(
 			Expression<Func<TEntity, TProperty>> getValue,
-			Func<TProperty, bool> rule,
+			Expression<Func<TProperty, bool>> rule,
 			string message)
 		{
 			rules.Add(new ValidationRule<TEntity, TProperty>(getValue, rule, message));
