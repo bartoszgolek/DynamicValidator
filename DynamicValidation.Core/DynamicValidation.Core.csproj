@@ -39,11 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExpressionBuilder.cs" />
+    <Compile Include="IExpressionBuilder.cs" />
     <Compile Include="IMessageBuilder.cs" />
-    <Compile Include="IRuleBuilder.cs" />
     <Compile Include="IValidationRule.cs" />
     <Compile Include="IValidator.cs" />
-    <Compile Include="IValidatorBuilderWithMessageBuilder.cs" />
     <Compile Include="MessageBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleBuilder.cs" />
@@ -52,7 +52,6 @@
     <Compile Include="ValidationRule.cs" />
     <Compile Include="Validator.cs" />
     <Compile Include="ValidatorBuilder.cs" />
-    <Compile Include="ValidatorBuilderWithMessageBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

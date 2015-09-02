@@ -1,35 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
 	public interface IValidatorBuilder<TEntity>
 	{
-		ValidatorBuilder<TEntity> WithRule<TProperty>(
-			Expression<Func<TEntity, TProperty>> getValue,
-			Expression<Func<TProperty, bool>> rule,
-			string message);
-
-		IValidator<TEntity> Create();
+		IExpressionBuilder<TEntity, TProperty> RuleOn<TProperty>(Expression<Func<TEntity, TProperty>> getValue);
 	}
 
-	public class ValidatorBuilder<TEntity> : IValidatorBuilder<TEntity>
+	internal class ValidatorBuilder<TEntity> : IValidatorBuilder<TEntity>
 	{
-		private readonly IList<IValidationRule<TEntity>> rules = new List<IValidationRule<TEntity>>();
+		private readonly IList<RuleBuilder<TEntity>> builders = new List<RuleBuilder<TEntity>>();
 
-		public ValidatorBuilder<TEntity> WithRule<TProperty>(
-			Expression<Func<TEntity, TProperty>> getValue,
-			Expression<Func<TProperty, bool>> rule,
-			string message)
+		public IExpressionBuilder<TEntity, TProperty> RuleOn<TProperty>(Expression<Func<TEntity, TProperty>> getValue)
 		{
-			rules.Add(new ValidationRule<TEntity, TProperty>(getValue, rule, message));
-
-			return this;
+			var messageBuilder = new MessageBuilder<TEntity>(this);
+			var expressionBuilder = new ExpressionBuilder<TEntity, TProperty>(messageBuilder, this);
+			var ruleBuilder = new RuleBuilder<TEntity, TProperty>(expressionBuilder, getValue);
+			builders.Add(ruleBuilder);
+			return expressionBuilder;
 		}
 
-		public IValidator<TEntity> Create()
+		public IValidator<TEntity> GetValidator()
 		{
+			var rules = builders.Select(rb => rb.CreateRule()).ToList();
 			return new Validator<TEntity>(rules);
 		}
 	}

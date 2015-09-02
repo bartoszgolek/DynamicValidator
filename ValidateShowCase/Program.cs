@@ -14,18 +14,19 @@ namespace ValidateShowCase
 
 			builder.RegisterType<Interactor>();
 			builder.Register(
-				c =>
-					new ValidatorBuilder<TestEntity>()
-					.WithRule(t => t.StringProperty, s => !string.IsNullOrEmpty(s), "StringProperty cannot be empty")
-					.WithRule(t => t.IntProperty, i => i > 0, "IntProperty have to be greater than zero")
+				c => Validator.For<TestEntity>(validatorBuilder => validatorBuilder
+					.RuleOn(t => t.StringProperty).Custom(s => !string.IsNullOrEmpty(s)).WithMessage("StringProperty cannot be empty")
+					.RuleOn(t => t.IntProperty).Custom(i => i > 0).WithMessage("IntProperty have to be greater than zero")
 					.RuleOn(t => t.IntProperty).Custom(i => i < 10).WithMessage("IntProperty have to be less than ten")
 					.RuleOn(t => t.IntProperty).Custom(i => i < 0)
 					.RuleOn(t => t.StringProperty).HasValue("StringProperty")
-					.RuleOn(t => t.StringProperty).MaxLength(10, "StringProperty")
+					.RuleOn(t => t.StringProperty).MaxLength(10, "StringProperty").WithMessage("Max message")
+					.RuleOn(t => t.StringProperty).MaxLength(5, "StringProperty")
+					.RuleOn(t => t.StringProperty).MinLength(10, "StringProperty").WithMessage("Min message")
 					.RuleOn(t => t).Custom(t => t.IntProperty == 5 && t.StringProperty != null).WithMessage("Custom message")
 					.RuleOn(t => t.DecimalProperty).IsNotNull("DecimalProperty")
 					.RuleOn(t => t.IntProperty).IsNotNull("IntProperty")
-					.Create()
+					)
 				).As<IValidator<TestEntity>>();
 
 			var container = builder.Build();

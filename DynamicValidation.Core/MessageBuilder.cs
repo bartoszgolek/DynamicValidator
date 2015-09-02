@@ -3,22 +3,32 @@ using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
-	public class MessageBuilder<TEntity, TProperty> : IMessageBuilder<TEntity>
+	internal class MessageBuilder<TEntity> : IMessageBuilder<TEntity>
 	{
-		private readonly IValidatorBuilder<TEntity> validatorBuilder;
-		private readonly Expression<Func<TEntity, TProperty>> getValue;
-		private readonly Expression<Func<TProperty, bool>> rule;
+		private readonly ValidatorBuilder<TEntity> validatorBuilder;
+		private string message = string.Empty;
 
-		public MessageBuilder(IValidatorBuilder<TEntity> validatorBuilder, Expression<Func<TEntity, TProperty>> getValue, Expression<Func<TProperty, bool>> rule)
+		public MessageBuilder(ValidatorBuilder<TEntity> validatorBuilder)
 		{
 			this.validatorBuilder = validatorBuilder;
-			this.getValue = getValue;
-			this.rule = rule;
 		}
 
 		public IValidatorBuilder<TEntity> WithMessage(string message)
 		{
-			return validatorBuilder.WithRule(getValue, rule, message);
+			this.message = message;
+			return validatorBuilder;
+		}
+
+		public IValidationRule<TEntity> CreateRule<TProperty>(
+			Expression<Func<TEntity, TProperty>> getValueExpr,
+			Expression<Func<TProperty, bool>> ruleExpr)
+		{
+			return new ValidationRule<TEntity, TProperty>(getValueExpr, ruleExpr, message);
+		}
+
+		public IExpressionBuilder<TEntity, TProperty> RuleOn<TProperty>(Expression<Func<TEntity, TProperty>> getValue)
+		{
+			return validatorBuilder.RuleOn(getValue);
 		}
 	}
 }
