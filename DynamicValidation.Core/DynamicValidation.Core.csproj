@@ -42,6 +42,7 @@
     <Compile Include="ExpressionBuilder.cs" />
     <Compile Include="IExpressionBuilder.cs" />
     <Compile Include="IMessageBuilder.cs" />
+    <Compile Include="IRuleBuilder.cs" />
     <Compile Include="IValidationRule.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
