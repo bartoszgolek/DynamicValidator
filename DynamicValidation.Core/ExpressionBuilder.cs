@@ -7,15 +7,13 @@ namespace DynamicValidation.Core
 	{
 		private readonly MessageBuilder<TEntity> messageBuilder;
 		private Expression<Func<TProperty, bool>> expression;
-		private readonly ValidatorBuilder<TEntity> validatorBuilder;
 
-		public ExpressionBuilder(MessageBuilder<TEntity> messageBuilder, ValidatorBuilder<TEntity> validatorBuilder)
+		public ExpressionBuilder(MessageBuilder<TEntity> messageBuilder)
 		{
 			this.messageBuilder = messageBuilder;
-			this.validatorBuilder = validatorBuilder;
 		}
 
-		public IMessageBuilder<TEntity> Custom(Expression<Func<TProperty, bool>> expression)
+		public IMessageBuilder<TEntity> WithExpression(Expression<Func<TProperty, bool>> expression)
 		{
 			this.expression = expression;
 			return messageBuilder;

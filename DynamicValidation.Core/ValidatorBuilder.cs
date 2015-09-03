@@ -5,19 +5,14 @@ using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
-	public interface IValidatorBuilder<TEntity>
-	{
-		IExpressionBuilder<TEntity, TProperty> RuleOn<TProperty>(Expression<Func<TEntity, TProperty>> getValue);
-	}
-
 	internal class ValidatorBuilder<TEntity> : IValidatorBuilder<TEntity>
 	{
-		private readonly IList<RuleBuilder<TEntity>> builders = new List<RuleBuilder<TEntity>>();
+		private readonly IList<IRuleBuilder<TEntity>> builders = new List<IRuleBuilder<TEntity>>();
 
 		public IExpressionBuilder<TEntity, TProperty> RuleOn<TProperty>(Expression<Func<TEntity, TProperty>> getValue)
 		{
 			var messageBuilder = new MessageBuilder<TEntity>(this);
-			var expressionBuilder = new ExpressionBuilder<TEntity, TProperty>(messageBuilder, this);
+			var expressionBuilder = new ExpressionBuilder<TEntity, TProperty>(messageBuilder);
 			var ruleBuilder = new RuleBuilder<TEntity, TProperty>(expressionBuilder, getValue);
 			builders.Add(ruleBuilder);
 			return expressionBuilder;

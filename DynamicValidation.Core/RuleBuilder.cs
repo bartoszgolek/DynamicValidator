@@ -3,12 +3,12 @@ using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
-	internal abstract class RuleBuilder<TEntity>
+	internal interface IRuleBuilder<in TEntity>
 	{
-		public abstract IValidationRule<TEntity> CreateRule();
+		IValidationRule<TEntity> CreateRule();
 	}
 
-	internal class RuleBuilder<TEntity, TProperty> : RuleBuilder<TEntity>
+	internal class RuleBuilder<TEntity, TProperty> : IRuleBuilder<TEntity>
 	{
 		private readonly ExpressionBuilder<TEntity, TProperty> expressionBuilder;
 		private readonly Expression<Func<TEntity, TProperty>> getValueExpr;
@@ -19,7 +19,7 @@ namespace DynamicValidation.Core
 			this.getValueExpr = getValueExpr;
 		}
 
-		public override IValidationRule<TEntity> CreateRule()
+		public IValidationRule<TEntity> CreateRule()
 		{
 			return expressionBuilder.CreateRule(getValueExpr);
 		}

@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DynamicValidation.Core
 {
-	public class Validator
+	public static class Validator
 	{
 		public static IValidator<TEntity> For<TEntity>(Action<IValidatorBuilder<TEntity>> build)
 		{
