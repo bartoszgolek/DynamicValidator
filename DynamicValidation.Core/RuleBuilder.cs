@@ -3,11 +3,6 @@ using System.Linq.Expressions;
 
 namespace DynamicValidation.Core
 {
-	internal interface IRuleBuilder<in TEntity>
-	{
-		IValidationRule<TEntity> CreateRule();
-	}
-
 	internal class RuleBuilder<TEntity, TProperty> : IRuleBuilder<TEntity>
 	{
 		private readonly ExpressionBuilder<TEntity, TProperty> expressionBuilder;
