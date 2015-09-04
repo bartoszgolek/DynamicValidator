@@ -11,11 +11,9 @@ namespace DynamicValidation.Core
 
 		public IExpressionBuilder<TEntity, TProperty> RuleOn<TProperty>(Expression<Func<TEntity, TProperty>> getValue)
 		{
-			var messageBuilder = new MessageBuilder<TEntity>(this);
-			var expressionBuilder = new ExpressionBuilder<TEntity, TProperty>(messageBuilder);
-			var ruleBuilder = new RuleBuilder<TEntity, TProperty>(expressionBuilder, getValue);
+			var ruleBuilder = new RuleBuilder<TEntity, TProperty>(this, getValue);
 			builders.Add(ruleBuilder);
-			return expressionBuilder;
+			return ruleBuilder;
 		}
 
 		public IValidator<TEntity> GetValidator()

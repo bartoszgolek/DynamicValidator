@@ -25,7 +25,16 @@ namespace DynamicValidation.Core
 
 		public ValidationResult Validate(T entity)
 		{
-			return new ValidationResult(rules.Select(validationRule => validationRule.Validate(entity)));
+			IList<RuleResult> ruleResults = new List<RuleResult>();
+			foreach (var rule in rules)
+			{
+				var ruleResult = rule.Validate(entity);
+				ruleResults.Add(ruleResult);
+				if (rule.Stop)
+					break;
+			}
+
+			return new ValidationResult(ruleResults);
 		}
 	}
 }

@@ -39,14 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExpressionBuilder.cs" />
     <Compile Include="IExpressionBuilder.cs" />
     <Compile Include="IMessageBuilder.cs" />
     <Compile Include="IRuleBuilder.cs" />
     <Compile Include="IValidationRule.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="IValidatorBuilder.cs" />
-    <Compile Include="MessageBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuleBuilder.cs" />
     <Compile Include="RuleResult.cs" />

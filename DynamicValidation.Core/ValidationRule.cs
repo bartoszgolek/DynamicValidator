@@ -6,25 +6,57 @@ namespace DynamicValidation.Core
 	internal class ValidationRule<TEntity, TProperty> : IValidationRule<TEntity>
 	{
 		private readonly Expression<Func<TEntity, TProperty>> getValueExpr;
-		private readonly string message;
 		private readonly Expression<Func<TProperty, bool>> ruleExpr;
-		private readonly Func<TEntity, TProperty> getValue;
-		private readonly Func<TProperty, bool> rule;
+		private readonly string message;
+		private readonly bool stop;
 
-		public ValidationRule(Expression<Func<TEntity, TProperty>> getValueExpr, Expression<Func<TProperty, bool>> ruleExpr, string message)
+		private readonly Func<TEntity, TProperty> getValue;
+		private readonly Func<TProperty, bool> when;
+		private readonly Func<TProperty, bool> rule;
+		private readonly IValidator<TProperty> innerValdiator;
+
+		public ValidationRule(
+			Expression<Func<TEntity, TProperty>> getValueExpr,
+			Expression<Func<TProperty, bool>> whenExpr,
+			Expression<Func<TProperty, bool>> ruleExpr,
+			string message,
+			bool stop,
+			IValidator<TProperty> innerValdiator)
 		{
 			this.getValueExpr = getValueExpr;
-			getValue = getValueExpr.Compile();
-			this.message = message;
 			this.ruleExpr = ruleExpr;
-			rule = ruleExpr.Compile();
+			this.message = message;
+			this.stop = stop;
+			this.innerValdiator = innerValdiator;
+
+			getValue = getValueExpr.Compile();
+			when = whenExpr.GetValueOrDefault(property => true).Compile();
+			rule = ruleExpr != null ? ruleExpr.Compile() : null;
 		}
 
 		public RuleResult Validate(TEntity entity)
 		{
-			bool result = rule(getValue(entity));
+			var propertyValue = getValue(entity);
+			if (!when(propertyValue))
+				return RuleResult.Valid(GetMemberName());
 
-			return new RuleResult(result, GetMemberName(), result ? string.Empty : GetMessage());
+			bool result = true;
+			if (rule != null)
+				result &= rule(propertyValue);
+
+			ValidationResult innerResult = null;
+			if (innerValdiator != null)
+			{
+				innerResult = innerValdiator.Validate(propertyValue);
+				result &= innerResult.Result;
+			}
+
+			return new RuleResult(result, GetMemberName(), result ? string.Empty : GetMessage(), innerResult);
+		}
+
+		public bool Stop
+		{
+			get { return stop; }
 		}
 
 		private string GetMemberName()
@@ -40,12 +72,20 @@ namespace DynamicValidation.Core
 
 		private string GetDefaultMessage()
 		{
-			string defaultMessage = ruleExpr.ToString();
+			string defaultMessage = ruleExpr != null ? ruleExpr.ToString() : string.Empty;
 			var memberName = GetMemberName();
 			if (!string.IsNullOrEmpty(memberName))
-				defaultMessage = memberName + ": " + ruleExpr;
+				defaultMessage = memberName + ": " + defaultMessage;
 
 			return defaultMessage;
+		}
+	}
+
+	internal static class ObjectExt
+	{
+		public static T GetValueOrDefault<T>(this T o, T defaultValue)
+		{
+			return o != null ? o : defaultValue;
 		}
 	}
 }

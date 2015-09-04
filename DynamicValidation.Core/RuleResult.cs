@@ -2,12 +2,30 @@
 {
 	public class RuleResult
 	{
-		public RuleResult(bool result, string property, string message)
+		public static RuleResult Valid(string memberName)
+		{
+			return new RuleResult(true, memberName, string.Empty, null);
+		}
+
+		public static RuleResult Invalid(string memberName, string message)
+		{
+			return new RuleResult(true, memberName, message, null);
+		}
+
+		public static RuleResult Invalid(string memberName, string message, ValidationResult innerResult)
+		{
+			return new RuleResult(true, memberName, message, innerResult);
+		}
+
+		public RuleResult(bool result, string property, string message, ValidationResult innerResult)
 		{
 			Result = result;
 			Property = property;
+			InnerResult = innerResult;
 			Message = message;
 		}
+
+		public ValidationResult InnerResult { get; private set; }
 
 		public string Message { get; private set; }
 
