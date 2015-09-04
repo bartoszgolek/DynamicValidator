@@ -75,20 +75,10 @@ namespace ValidateShowCase
 
 		private static string ReadDetails(ValidationResult result, int level = 1)
 		{
-			var separator = "," + Environment.NewLine + GetIndent(level);
+			var separator = "," + Environment.NewLine + new String('\t', level);
 			IEnumerable<string> messages = result.Details.Where(d => !d.Result).Select(d => GetRuleResultMessage(d, level));
 
-			return Environment.NewLine + GetIndent(level) + string.Join(separator, messages);
-		}
-
-		private static string GetIndent(int level)
-		{
-			string result = string.Empty;
-			for (int i = 0; i < level; i++)
-			{
-				result += " - ";
-			}
-			return result;
+			return Environment.NewLine + new String('\t', level) + string.Join(separator, messages);
 		}
 
 		private static string GetRuleResultMessage(RuleResult d, int level)
