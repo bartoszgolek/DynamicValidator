@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicValidation.Core", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicValidation.Extensions", "DynamicValidation.Extensions\DynamicValidation.Extensions.csproj", "{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicValidation.Core.Tests", "DynamicValidation.Core.Tests\DynamicValidation.Core.Tests.csproj", "{FC037523-81B3-4792-8720-EF0D1A13B10D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CFCFF0C-DEC3-4040-88C4-FF32CBBA24FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC037523-81B3-4792-8720-EF0D1A13B10D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC037523-81B3-4792-8720-EF0D1A13B10D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC037523-81B3-4792-8720-EF0D1A13B10D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC037523-81B3-4792-8720-EF0D1A13B10D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
