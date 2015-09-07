@@ -11,7 +11,7 @@ namespace DynamicValidation.Core
 		private Expression<Func<TProperty, bool>> when;
 		private string message;
 		private bool stop;
-		private IValidator<TProperty> innerValdiator;
+		private Func<IValidator<TProperty>> getInnerValdiator = () => null;
 
 		public RuleBuilder(ValidatorBuilder<TEntity> validatorBuilder, Expression<Func<TEntity, TProperty>> getValueExpr)
 		{
@@ -21,7 +21,7 @@ namespace DynamicValidation.Core
 
 		public IValidationRule<TEntity> CreateRule()
 		{
-			return new ValidationRule<TEntity, TProperty>(getValueExpr, when, expression, message, stop, innerValdiator);
+			return new ValidationRule<TEntity, TProperty>(getValueExpr, when, expression, message, stop, getInnerValdiator());
 		}
 
 		public IExpressionBuilder<TEntity, TProperty1> RuleOn<TProperty1>(Expression<Func<TEntity, TProperty1>> getValue)
@@ -31,7 +31,13 @@ namespace DynamicValidation.Core
 
 		public IExpressionBuilder<TEntity, TProperty> Validator(IValidator<TProperty> innerValdiator)
 		{
-			this.innerValdiator = innerValdiator;
+			getInnerValdiator = () => innerValdiator;
+			return this;
+		}
+
+		public IExpressionBuilder<TEntity, TProperty> Validator(Action<IValidatorBuilder<TProperty>> innerValidatorBuilder)
+		{
+			getInnerValdiator = () => Core.Validator.For(innerValidatorBuilder);
 			return this;
 		}
 

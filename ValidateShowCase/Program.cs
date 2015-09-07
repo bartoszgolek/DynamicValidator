@@ -35,6 +35,9 @@ namespace ValidateShowCase
 					.RuleOn(t => t.SubEntity).When(se => se != null).Validator(Validator.For<TestSubEntity>(validatorBuilder1 => validatorBuilder1
 						.RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error")
 					))
+					.RuleOn(t => t.SubEntity).When(se => se != null).Validator(validatorBuilder1 => validatorBuilder1
+						.RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error2")
+					)
 					.RuleOn(t => t.IntProperty).Expression(i => false).Stop().Message("stop") //breaks validation
 					.RuleOn(t => t.IntProperty).Expression(i => false).Message("After stop") //will not be used
 					)

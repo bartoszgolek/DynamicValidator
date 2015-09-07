@@ -9,6 +9,8 @@ namespace DynamicValidation.Core
 
 		IExpressionBuilder<TEntity, TProperty> Validator(IValidator<TProperty> innerValdiator);
 
+		IExpressionBuilder<TEntity, TProperty> Validator(Action<IValidatorBuilder<TProperty>> innerValidatorBuilder);
+
 		IExpressionBuilder<TEntity, TProperty> Message(string message);
 
 		IExpressionBuilder<TEntity, TProperty> When(Expression<Func<TProperty, bool>> when);
