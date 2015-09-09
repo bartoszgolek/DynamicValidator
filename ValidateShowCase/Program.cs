@@ -12,7 +12,7 @@ namespace ValidateShowCase
 		public static IValidatorBuilder<TestEntity> TestEntityRuleTemplate(this IValidatorBuilder<TestEntity> validatorBuilder)
 		{
 			return validatorBuilder
-				.RuleOn(t => t.StringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("StringProperty cannot be empty")
+				.RuleOn(t => t.StringProperty).Expression(s => !string.IsNullOrEmpty(s)).Named("Required").Message("StringProperty cannot be empty")
 				.RuleOn(t => t.IntProperty).Expression(i => i > 0).Message("IntProperty have to be greater than zero")
 				.RuleOn(t => t.IntProperty).Expression(i => i < 10).Message("IntProperty have to be less than ten");
 		}
@@ -33,7 +33,7 @@ namespace ValidateShowCase
 					.RuleOn(t => t.StringProperty).MaxLength(5, "StringProperty")
 					.RuleOn(t => t.StringProperty).MinLength(10, "StringProperty").Message("Min message")
 					.RuleOn(t => t).Expression(t => t.IntProperty == 5 && t.StringProperty != null).Message("Custom message")
-					.RuleOn(t => t.DecimalProperty).IsNotNull("DecimalProperty")
+					.RuleOn(t => t.StringReqProperty).IsNotNull("StringReqProperty").Named("Required")
 					.RuleOn(t => t.IntProperty).When(i => false).Expression(i => false).Message("when false") //will not be used
 					.RuleOn(t => t.IntProperty).When(i => true).Expression(i => false).Not.Stop().Message("when true") //will be used
 					.RuleOn(t => t.IntProperty).Expression(i => false).Not.Stop().Message("not stop")
@@ -44,7 +44,7 @@ namespace ValidateShowCase
 						.RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error")
 					))
 					.RuleOn(t => t.SubEntity).When(te => te != null).Validator(validatorBuilder1 => validatorBuilder1
-						.RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error2")
+						.RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error2").Named("Name")
 					)
 					.RuleOn(t => t.IntProperty).Expression(i => false).Stop().Message("stop") //breaks validation
 					.RuleOn(t => t.IntProperty).Expression(i => false).Message("After stop") //will not be used
@@ -99,7 +99,7 @@ namespace ValidateShowCase
 			if (d.InnerResult != null)
 				subMessage = ReadDetails(d.InnerResult, level + 1);
 
-			return d.Message + subMessage;
+			return d.Message + " (" + d.FullName + ")" + subMessage;
 		}
 	}
 
@@ -108,6 +108,7 @@ namespace ValidateShowCase
 		public string StringProperty { get; set; }
 		public int IntProperty { get; set; }
 		public decimal DecimalProperty { get; set; }
+		public string StringReqProperty { get; set; }
 		public TestSubEntity SubEntity { get; set; }
 		public TestSubEntity SubEntity2 { get; set; }
 	}

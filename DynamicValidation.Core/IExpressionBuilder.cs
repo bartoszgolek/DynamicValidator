@@ -13,6 +13,8 @@ namespace DynamicValidation.Core
 
 		IExpressionBuilder<TEntity, TProperty> Message(string message);
 
+		IExpressionBuilder<TEntity, TProperty> Named(string name);
+
 		IExpressionBuilder<TEntity, TProperty> When(Expression<Func<TEntity, bool>> when);
 
 		INotBuilder<TEntity, TProperty> Not { get; }

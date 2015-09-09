@@ -7,6 +7,7 @@ namespace DynamicValidation.Core
 	{
 		private readonly Expression<Func<TEntity, TProperty>> getValueExpr;
 		private readonly Expression<Func<TProperty, bool>> ruleExpr;
+		private readonly string name;
 		private readonly string message;
 		private readonly bool stop;
 
@@ -20,12 +21,14 @@ namespace DynamicValidation.Core
 			Expression<Func<TEntity, bool>> whenExpr,
 			Expression<Func<TProperty, bool>> ruleExpr,
 			string message,
+			string name,
 			bool stop,
 			IValidator<TProperty> innerValdiator)
 		{
 			this.getValueExpr = getValueExpr;
 			this.ruleExpr = ruleExpr;
 			this.message = message;
+			this.name = name;
 			this.stop = stop;
 			this.innerValdiator = innerValdiator;
 
@@ -37,7 +40,7 @@ namespace DynamicValidation.Core
 		public RuleResult Validate(TEntity entity)
 		{
 			if (!when(entity))
-				return RuleResult.Valid(GetMemberName());
+				return RuleResult.Valid(typeof(TEntity), name, GetMemberName());
 
 			var propertyValue = getValue(entity);
 
@@ -52,7 +55,7 @@ namespace DynamicValidation.Core
 				result &= innerResult.Result;
 			}
 
-			return new RuleResult(result, GetMemberName(), result ? string.Empty : GetMessage(), innerResult);
+			return new RuleResult(result, typeof(TEntity), name, GetMemberName(), result ? string.Empty : GetMessage(), innerResult);
 		}
 
 		public bool Stop
@@ -74,6 +77,7 @@ namespace DynamicValidation.Core
 		private string GetDefaultMessage()
 		{
 			string defaultMessage = ruleExpr != null ? ruleExpr.ToString() : string.Empty;
+
 			var memberName = GetMemberName();
 			if (!string.IsNullOrEmpty(memberName))
 				defaultMessage = memberName + ": " + defaultMessage;
