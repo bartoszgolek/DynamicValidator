@@ -7,6 +7,17 @@ using DynamicValidation.Extensions;
 
 namespace ValidateShowCase
 {
+	internal static class RuleTemplates
+	{
+		public static IValidatorBuilder<TestEntity> TestEntityRuleTemplate(this IValidatorBuilder<TestEntity> validatorBuilder)
+		{
+			return validatorBuilder
+				.RuleOn(t => t.StringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("StringProperty cannot be empty")
+				.RuleOn(t => t.IntProperty).Expression(i => i > 0).Message("IntProperty have to be greater than zero")
+				.RuleOn(t => t.IntProperty).Expression(i => i < 10).Message("IntProperty have to be less than ten");
+		}
+	}
+
 	internal class Program
 	{
 		private static void Main(string[] args)
@@ -16,10 +27,7 @@ namespace ValidateShowCase
 			builder.RegisterType<Interactor>();
 			builder.Register(
 				c => Validator.For<TestEntity>(validatorBuilder => validatorBuilder
-					.RuleOn(t => t.StringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("StringProperty cannot be empty")
-					.RuleOn(t => t.IntProperty).Expression(i => i > 0).Message("IntProperty have to be greater than zero")
-					.RuleOn(t => t.IntProperty).Expression(i => i < 10).Message("IntProperty have to be less than ten")
-					.RuleOn(t => t.IntProperty).Expression(i => i < 0)
+					.TestEntityRuleTemplate()
 					.RuleOn(t => t.StringProperty).HasValue("StringProperty")
 					.RuleOn(t => t.StringProperty).MaxLength(10, "StringProperty").Message("Max message")
 					.RuleOn(t => t.StringProperty).MaxLength(5, "StringProperty")
