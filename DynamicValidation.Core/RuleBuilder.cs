@@ -8,7 +8,7 @@ namespace DynamicValidation.Core
 		private readonly ValidatorBuilder<TEntity> validatorBuilder;
 		private readonly Expression<Func<TEntity, TProperty>> getValueExpr;
 		private Expression<Func<TProperty, bool>> expression;
-		private Expression<Func<TProperty, bool>> when;
+		private Expression<Func<TEntity, bool>> when;
 		private string message;
 		private bool stop;
 		private Func<IValidator<TProperty>> getInnerValdiator = () => null;
@@ -47,7 +47,7 @@ namespace DynamicValidation.Core
 			return this;
 		}
 
-		public IExpressionBuilder<TEntity, TProperty> When(Expression<Func<TProperty, bool>> when)
+		public IExpressionBuilder<TEntity, TProperty> When(Expression<Func<TEntity, bool>> when)
 		{
 			this.when = when;
 			return this;
@@ -55,7 +55,7 @@ namespace DynamicValidation.Core
 
 		public INotBuilder<TEntity, TProperty> Not
 		{
-			get { return new NotBuilder<TEntity, TProperty>(this); }
+			get { return new NotBuilder(this); }
 		}
 
 		public IExpressionBuilder<TEntity, TProperty> Expression(Expression<Func<TProperty, bool>> expression)
@@ -66,11 +66,11 @@ namespace DynamicValidation.Core
 
 		public IExpressionBuilder<TEntity, TProperty> Stop()
 		{
-			this.stop = true;
+			stop = true;
 			return this;
 		}
 
-		internal class NotBuilder<TEntity1, TProperty1> : INotBuilder<TEntity, TProperty>
+		internal class NotBuilder : INotBuilder<TEntity, TProperty>
 		{
 			private readonly RuleBuilder<TEntity, TProperty> ruleBuilder;
 

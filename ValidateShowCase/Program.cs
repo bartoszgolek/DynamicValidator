@@ -32,10 +32,10 @@ namespace ValidateShowCase
 					.RuleOn(t => t.IntProperty).IsNotNull("IntProperty")
 					.RuleOn(t => t.SubEntity).Expression(se => se != null).Message("SubEntity cannot be null")
 					.RuleOn(t => t.SubEntity2).Expression(se => se != null).Message("SubEntity2 cannot be null")
-					.RuleOn(t => t.SubEntity).When(se => se != null).Validator(Validator.For<TestSubEntity>(validatorBuilder1 => validatorBuilder1
+					.RuleOn(t => t.SubEntity).When(te => te != null).Validator(Validator.For<TestSubEntity>(validatorBuilder1 => validatorBuilder1
 						.RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error")
 					))
-					.RuleOn(t => t.SubEntity).When(se => se != null).Validator(validatorBuilder1 => validatorBuilder1
+					.RuleOn(t => t.SubEntity).When(te => te != null).Validator(validatorBuilder1 => validatorBuilder1
 						.RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error2")
 					)
 					.RuleOn(t => t.IntProperty).Expression(i => false).Stop().Message("stop") //breaks validation

@@ -11,13 +11,13 @@ namespace DynamicValidation.Core
 		private readonly bool stop;
 
 		private readonly Func<TEntity, TProperty> getValue;
-		private readonly Func<TProperty, bool> when;
+		private readonly Func<TEntity, bool> when;
 		private readonly Func<TProperty, bool> rule;
 		private readonly IValidator<TProperty> innerValdiator;
 
 		public ValidationRule(
 			Expression<Func<TEntity, TProperty>> getValueExpr,
-			Expression<Func<TProperty, bool>> whenExpr,
+			Expression<Func<TEntity, bool>> whenExpr,
 			Expression<Func<TProperty, bool>> ruleExpr,
 			string message,
 			bool stop,
@@ -30,15 +30,16 @@ namespace DynamicValidation.Core
 			this.innerValdiator = innerValdiator;
 
 			getValue = getValueExpr.Compile();
-			when = whenExpr.GetValueOrDefault(property => true).Compile();
+			when = (whenExpr ?? (property => true)).Compile();
 			rule = ruleExpr != null ? ruleExpr.Compile() : null;
 		}
 
 		public RuleResult Validate(TEntity entity)
 		{
-			var propertyValue = getValue(entity);
-			if (!when(propertyValue))
+			if (!when(entity))
 				return RuleResult.Valid(GetMemberName());
+
+			var propertyValue = getValue(entity);
 
 			bool result = true;
 			if (rule != null)
@@ -78,14 +79,6 @@ namespace DynamicValidation.Core
 				defaultMessage = memberName + ": " + defaultMessage;
 
 			return defaultMessage;
-		}
-	}
-
-	internal static class ObjectExt
-	{
-		public static T GetValueOrDefault<T>(this T o, T defaultValue)
-		{
-			return o != null ? o : defaultValue;
 		}
 	}
 }
