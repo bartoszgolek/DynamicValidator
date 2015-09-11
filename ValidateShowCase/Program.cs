@@ -28,16 +28,16 @@ namespace ValidateShowCase
 			builder.Register(
 				c => Validator.For<TestEntity>(validatorBuilder => validatorBuilder
 					.TestEntityRuleTemplate()
-					.RuleOn(t => t.StringProperty).HasValue("StringProperty")
-					.RuleOn(t => t.StringProperty).MaxLength(10, "StringProperty").Message("Max message")
-					.RuleOn(t => t.StringProperty).MaxLength(5, "StringProperty")
-					.RuleOn(t => t.StringProperty).MinLength(10, "StringProperty").Message("Min message")
+					.RuleOn(t => t.StringProperty).HasValue()
+					.RuleOn(t => t.StringProperty).MaxLength(10).Message("Max message")
+					.RuleOn(t => t.StringProperty).MaxLength(5)
+					.RuleOn(t => t.StringProperty).MinLength(10).Message("Min message")
 					.RuleOn(t => t).Expression(t => t.IntProperty == 5 && t.StringProperty != null).Message("Custom message")
-					.RuleOn(t => t.StringReqProperty).IsNotNull("StringReqProperty").Named("Required")
+					.RuleOn(t => t.StringReqProperty).IsNotNull().Named("Required")
 					.RuleOn(t => t.IntProperty).When(i => false).Expression(i => false).Message("when false") //will not be used
 					.RuleOn(t => t.IntProperty).When(i => true).Expression(i => false).Not.Stop().Message("when true") //will be used
 					.RuleOn(t => t.IntProperty).Expression(i => false).Not.Stop().Message("not stop")
-					.RuleOn(t => t.IntProperty).IsNotNull("IntProperty")
+					.RuleOn(t => t.IntProperty).IsNotNull()
 					.RuleOn(t => t.SubEntity).Expression(se => se != null).Message("SubEntity cannot be null")
 					.RuleOn(t => t.SubEntity2).Expression(se => se != null).Message("SubEntity2 cannot be null")
 					.RuleOn(t => t.SubEntity).When(te => te != null).Validator(Validator.For<TestSubEntity>(validatorBuilder1 => validatorBuilder1

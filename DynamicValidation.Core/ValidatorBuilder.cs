@@ -8,6 +8,7 @@ namespace DynamicValidation.Core
 	internal class ValidatorBuilder<TEntity> : IValidatorBuilder<TEntity>
 	{
 		private readonly IList<IRuleBuilder<TEntity>> builders = new List<IRuleBuilder<TEntity>>();
+		private string validatorName;
 
 		public IExpressionBuilder<TEntity, TProperty> RuleOn<TProperty>(Expression<Func<TEntity, TProperty>> getValue)
 		{
@@ -19,7 +20,13 @@ namespace DynamicValidation.Core
 		public IValidator<TEntity> GetValidator()
 		{
 			var rules = builders.Select(rb => rb.CreateRule()).ToList();
-			return new Validator<TEntity>(rules);
+			return new Validator<TEntity>(rules, validatorName);
+		}
+
+		public IValidatorBuilder<TEntity> ValidatorName(string name)
+		{
+			validatorName = name;
+			return this;
 		}
 	}
 }

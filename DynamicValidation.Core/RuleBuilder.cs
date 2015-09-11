@@ -30,6 +30,11 @@ namespace DynamicValidation.Core
 			return validatorBuilder.RuleOn(getValue);
 		}
 
+		public IValidatorBuilder<TEntity> ValidatorName(string name)
+		{
+			return validatorBuilder.ValidatorName(name);
+		}
+
 		public IExpressionBuilder<TEntity, TProperty> Validator(IValidator<TProperty> innerValdiator)
 		{
 			getInnerValdiator = () => innerValdiator;

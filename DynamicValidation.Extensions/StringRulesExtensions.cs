@@ -4,28 +4,19 @@ namespace DynamicValidation.Extensions
 {
 	public static class StringRulesExtensions
 	{
-		public static IExpressionBuilder<TEntity, string> HasValue<TEntity>(this IExpressionBuilder<TEntity, string> ruleBuilder,
-																string property)
+		public static IExpressionBuilder<TEntity, string> HasValue<TEntity>(this IExpressionBuilder<TEntity, string> ruleBuilder)
 		{
-			var messageBuilder = ruleBuilder.Expression(s => !string.IsNullOrEmpty(s));
-			messageBuilder.Message(string.Format("{0} cannot be Null or Empty", property));
-			return messageBuilder;
+			return ruleBuilder.Expression(t => t != null).Message("%member% cannot be Null");
 		}
 
-		public static IExpressionBuilder<TEntity, string> MaxLength<TEntity>(this IExpressionBuilder<TEntity, string> ruleBuilder, int length,
-																	string property)
+		public static IExpressionBuilder<TEntity, string> MaxLength<TEntity>(this IExpressionBuilder<TEntity, string> ruleBuilder, int length)
 		{
-			var messageBuilder = ruleBuilder.Expression(s => s.Length < length);
-			messageBuilder.Message(string.Format("{0} cannot be longer than {1} chars", property, length));
-			return messageBuilder;
+			return ruleBuilder.Expression(s => s.Length < length).Message(string.Format("%member% cannot be longer than {0} chars", length));
 		}
 
-		public static IExpressionBuilder<TEntity, string> MinLength<TEntity>(this IExpressionBuilder<TEntity, string> ruleBuilder, int length,
-																	string property)
+		public static IExpressionBuilder<TEntity, string> MinLength<TEntity>(this IExpressionBuilder<TEntity, string> ruleBuilder, int length)
 		{
-			var messageBuilder = ruleBuilder.Expression(s => s.Length > length);
-			messageBuilder.Message(string.Format("{0} cannot be shorter than {1} chars", property, length));
-			return messageBuilder;
+			return ruleBuilder.Expression(s => s.Length > length).Message(string.Format("%member% cannot be shorter than {0} chars", length));
 		}
 	}
 }

@@ -43,7 +43,6 @@
     <Compile Include="IntRulesExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringRulesExtensions.cs" />
-    <Compile Include="ValidatorBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DynamicValidation.Core\DynamicValidation.Core.csproj">

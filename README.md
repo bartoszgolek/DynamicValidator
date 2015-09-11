@@ -15,28 +15,29 @@ Create Validator:
 ```
 var validator = Validator.For<TestEntity>(
   validatorBuilder => validatorBuilder
-    .RuleOn(t => t.StringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("StringProperty cannot be empty")
-    .RuleOn(t => t.IntProperty).Expression(i => i > 0).Message("IntProperty have to be greater than zero")
-    .RuleOn(t => t.IntProperty).Expression(i => i < 10).Message("IntProperty have to be less than ten")
-    .RuleOn(t => t.IntProperty).Expression(i => i < 0)
-    .RuleOn(t => t.StringProperty).HasValue("StringProperty")
-    .RuleOn(t => t.StringProperty).MaxLength(10, "StringProperty").Message("Max message")
-    .RuleOn(t => t.StringProperty).MaxLength(5, "StringProperty")
-    .RuleOn(t => t.StringProperty).MinLength(10, "StringProperty").Message("Min message")
+    .TestEntityRuleTemplate()
+    .RuleOn(t => t.StringProperty).HasValue()
+    .RuleOn(t => t.StringProperty).MaxLength(10).Message("Max message")
+    .RuleOn(t => t.StringProperty).MaxLength(5)
+    .RuleOn(t => t.StringProperty).MinLength(10).Message("Min message")
     .RuleOn(t => t).Expression(t => t.IntProperty == 5 && t.StringProperty != null).Message("Custom message")
-    .RuleOn(t => t.DecimalProperty).IsNotNull("DecimalProperty")
+    .RuleOn(t => t.StringReqProperty).IsNotNull().Named("Required")
     .RuleOn(t => t.IntProperty).When(i => false).Expression(i => false).Message("when false") //will not be used
     .RuleOn(t => t.IntProperty).When(i => true).Expression(i => false).Not.Stop().Message("when true") //will be used
     .RuleOn(t => t.IntProperty).Expression(i => false).Not.Stop().Message("not stop")
-    .RuleOn(t => t.IntProperty).IsNotNull("IntProperty")
+    .RuleOn(t => t.IntProperty).IsNotNull()
     .RuleOn(t => t.SubEntity).Expression(se => se != null).Message("SubEntity cannot be null")
     .RuleOn(t => t.SubEntity2).Expression(se => se != null).Message("SubEntity2 cannot be null")
-    .RuleOn(t => t.SubEntity).When(se => se != null).Validator(Validator.For<TestSubEntity>(validatorBuilder1 => validatorBuilder1
+    .RuleOn(t => t.SubEntity).When(te => te != null).Validator(Validator.For<TestSubEntity>(validatorBuilder1 => validatorBuilder1
       .RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error")
     ))
+    .RuleOn(t => t.SubEntity).When(te => te != null).Validator(validatorBuilder1 => validatorBuilder1
+      .RuleOn(ts => ts.SubStringProperty).Expression(s => !string.IsNullOrEmpty(s)).Message("SubEntity error2").Named("Name")
+    )
     .RuleOn(t => t.IntProperty).Expression(i => false).Stop().Message("stop") //breaks validation
     .RuleOn(t => t.IntProperty).Expression(i => false).Message("After stop") //will not be used
 )
+
 ```
 
 Use validator:
@@ -77,15 +78,15 @@ private static string GetRuleResultMessage(RuleResult d, int level)
 
 Create own rules with custom message:
 ```
-	public static class GeneralRulesExtensions
-	{
-		public static IMessageBuilder<TEntity> IsNotNull<TEntity, TProperty>(this IExpressionBuilder<TEntity, TProperty> ruleBuilder, string property)
-		{
-			var messageBuilder = ruleBuilder.WithExpression(t => t != null);
-			messageBuilder.WithMessage(string.Format("{0} cannot be Null", property));
-			return messageBuilder;
-		}
-	}
+  public static class GeneralRulesExtensions
+  {
+    public static IMessageBuilder<TEntity> IsNotNull<TEntity, TProperty>(this IExpressionBuilder<TEntity, TProperty> ruleBuilder, string property)
+    {
+      var messageBuilder = ruleBuilder.WithExpression(t => t != null);
+      messageBuilder.WithMessage(string.Format("{0} cannot be Null", property));
+      return messageBuilder;
+    }
+  }
 ```
 
 Enjoy!

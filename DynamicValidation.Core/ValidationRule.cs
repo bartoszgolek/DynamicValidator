@@ -7,6 +7,7 @@ namespace DynamicValidation.Core
 	{
 		private readonly Expression<Func<TEntity, TProperty>> getValueExpr;
 		private readonly Expression<Func<TProperty, bool>> ruleExpr;
+		private readonly Expression<Func<TEntity, bool>> whenExpr;
 		private readonly string name;
 		private readonly string message;
 		private readonly bool stop;
@@ -27,6 +28,7 @@ namespace DynamicValidation.Core
 		{
 			this.getValueExpr = getValueExpr;
 			this.ruleExpr = ruleExpr;
+			this.whenExpr = whenExpr;
 			this.message = message;
 			this.name = name;
 			this.stop = stop;
@@ -71,7 +73,18 @@ namespace DynamicValidation.Core
 
 		private string GetMessage()
 		{
-			return string.IsNullOrWhiteSpace(message) ? GetDefaultMessage() : message;
+			return FillMessageTemplate(string.IsNullOrWhiteSpace(message) ? GetDefaultMessage() : message);
+		}
+
+		private string FillMessageTemplate(string message)
+		{
+			return message.Replace("%member%", GetMemberName())
+				.Replace("%get_value%", getValueExpr != null ? getValueExpr.ToString() : string.Empty)
+				.Replace("%name%", name ?? string.Empty)
+				.Replace("%expression%", ruleExpr != null ? ruleExpr.ToString() : string.Empty)
+				.Replace("%when%", whenExpr != null ? whenExpr.ToString() : string.Empty)
+				.Replace("%stop%", stop ? "true" : "false")
+				.Replace("%validator%", innerValdiator != null ? innerValdiator.Name : string.Empty);
 		}
 
 		private string GetDefaultMessage()

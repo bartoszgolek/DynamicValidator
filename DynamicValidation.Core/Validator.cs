@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace DynamicValidation.Core
 {
@@ -17,9 +16,11 @@ namespace DynamicValidation.Core
 	internal class Validator<T> : IValidator<T>
 	{
 		private readonly IList<IValidationRule<T>> rules;
+		private readonly string name;
 
-		public Validator(IEnumerable<IValidationRule<T>> rules)
+		public Validator(IEnumerable<IValidationRule<T>> rules, string name)
 		{
+			this.name = name;
 			this.rules = new List<IValidationRule<T>>(rules);
 		}
 
@@ -35,6 +36,11 @@ namespace DynamicValidation.Core
 			}
 
 			return new ValidationResult(ruleResults);
+		}
+
+		public string Name
+		{
+			get { return name; }
 		}
 	}
 }
